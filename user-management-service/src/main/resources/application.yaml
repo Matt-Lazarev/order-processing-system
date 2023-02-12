@@ -1,0 +1,41 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: user-management-service
+
+  security:
+    oauth2:
+      client:
+        registration:
+          admin-cli:
+            provider: keycloak
+            client-name: admin-cli
+            client-id: admin-cli
+            client-secret: Kg2FhXyLYz9mVEqxUvafKMM1XV2Nssvl
+            authorization-grant-type: client_credentials
+            #redirect-uri: http://127.0.0.1:8080/login/oauth2/code/admin-cli
+            scope: openid, profile, roles
+        provider:
+          keycloak:
+            issuer-uri: 'http://localhost:8181/realms/master'
+
+      resourceserver:
+        jwt:
+          issuer-uri: 'http://localhost:8181/realms/order-processing-system-realm'
+
+  zipkin:
+    base-url: http://localhost:9411
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+application:
+  security:
+    oauth2:
+      realm: 'order-processing-system-realm'

@@ -1,0 +1,10 @@
+spring:
+  zipkin:
+    base-url: http://zipkin:9411
+
+eureka:
+  instance:
+    hostname: discovery-server
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@discovery-server:8761/eureka

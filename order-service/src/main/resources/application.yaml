@@ -1,0 +1,52 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/order_db
+    username: admin
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: 'http://localhost:8181/realms/order-processing-system-realm'
+
+  zipkin:
+    base-url: http://localhost:9411
+
+  flyway:
+    baseline-on-migrate: true
+    locations: 'classpath:db/migration/{vendor}'
+
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+    consumer:
+      auto-offset-reset: latest
+      properties:
+        spring.json.trusted.packages: "*"
+      group-id: order_group
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+application:
+  new-orders-topic: 't_new_orders'
+  inventory-check-orders-topic: 't_inventory_check_orders'
+  payment-await-orders-topic: 't_payment_await_orders'
+  rejected-orders-topic: 't_rejected_orders'
+  updated-orders-topic: 't_updated_orders'

@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins
+    privileged: true
+    command: ["--httpPort=8090"]
+    volumes:
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "8090:8090"
+      - "50000:50000"
+  socat:
+    image: alpine/socat
+    container_name: alpine-socat
+    ports:
+      - "127.0.0.1:2376:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - tcp-listen:2375,fork,reuseaddr
+      - unix-connect:/var/run/docker.sock
+
+networks:
+  default:
+    name: jenkins-network
+
+volumes:
+  jenkins-data:
+    name: jenkins-data
